@@ -3,6 +3,7 @@ package org.gbif.pipelines.clustering;
 import static org.gbif.pipelines.core.parsers.clustering.RelationshipAssertion.FeatureAssertion.*;
 import static org.junit.Assert.*;
 
+import com.google.common.collect.Lists;
 import java.util.Arrays;
 import java.util.List;
 import org.apache.spark.sql.Dataset;
@@ -55,7 +56,8 @@ public class OccurrenceRelationshipsSparkTest extends BaseSparkTest {
             DataTypes.createStructField("genericName", DataTypes.StringType, true),
             DataTypes.createStructField("specificEpithet", DataTypes.StringType, true),
             DataTypes.createStructField("taxonRank", DataTypes.StringType, true),
-            DataTypes.createStructField("typeStatus", DataTypes.StringType, true),
+            DataTypes.createStructField(
+                "typeStatus", DataTypes.createArrayType(DataTypes.StringType), true),
             DataTypes.createStructField("preparations", DataTypes.StringType, true),
             DataTypes.createStructField("decimalLatitude", DataTypes.DoubleType, true),
             DataTypes.createStructField("decimalLongitude", DataTypes.DoubleType, true),
@@ -67,13 +69,15 @@ public class OccurrenceRelationshipsSparkTest extends BaseSparkTest {
             DataTypes.createStructField("recordNumber", DataTypes.StringType, true),
             DataTypes.createStructField("fieldNumber", DataTypes.StringType, true),
             DataTypes.createStructField("occurrenceID", DataTypes.StringType, true),
-            DataTypes.createStructField("otherCatalogNumbers", DataTypes.StringType, true),
+            DataTypes.createStructField(
+                "otherCatalogNumbers", DataTypes.createArrayType(DataTypes.StringType), true),
             DataTypes.createStructField("institutionCode", DataTypes.StringType, true),
             DataTypes.createStructField("collectionCode", DataTypes.StringType, true),
             DataTypes.createStructField("catalogNumber", DataTypes.StringType, true),
-            DataTypes.createStructField("recordedBy", DataTypes.StringType, true),
-            DataTypes.createStructField("recordedByID", DataTypes.StringType, true),
-            DataTypes.createStructField("multi", DataTypes.StringType, true)
+            DataTypes.createStructField(
+                "recordedBy", DataTypes.createArrayType(DataTypes.StringType), true),
+            DataTypes.createStructField(
+                "recordedByID", DataTypes.createArrayType(DataTypes.StringType), true),
           });
 
   @Test
@@ -160,7 +164,7 @@ public class OccurrenceRelationshipsSparkTest extends BaseSparkTest {
                 .with("decimalLatitude", 10d)
                 .with("decimalLongitude", 10d)
                 .with("countryCode", "DK")
-                .with("typeStatus", "HoloType")
+                .with("typeStatus", Lists.newArrayList("HoloType"))
                 .buildWithSchema());
 
     OccurrenceFeatures o2 =
@@ -170,7 +174,7 @@ public class OccurrenceRelationshipsSparkTest extends BaseSparkTest {
                 .with("decimalLatitude", 20d) // different
                 .with("decimalLongitude", 20d) // different
                 .with("countryCode", "NO") // different
-                .with("typeStatus", "HoloType")
+                .with("typeStatus", Lists.newArrayList("HoloType"))
                 .buildWithSchema());
 
     RelationshipAssertion<OccurrenceFeatures> assertion = OccurrenceRelationships.generate(o1, o2);
@@ -196,7 +200,7 @@ public class OccurrenceRelationshipsSparkTest extends BaseSparkTest {
                 .with("month", 8)
                 .with("day", 1) // day trap set
                 .with("countryCode", "DK")
-                .with("recordedBy", "Donald Hobern")
+                .with("recordedBy", Lists.newArrayList("Donald Hobern"))
                 .buildWithSchema());
 
     OccurrenceFeatures o2 =
@@ -210,7 +214,7 @@ public class OccurrenceRelationshipsSparkTest extends BaseSparkTest {
                 .with("month", 8)
                 .with("day", 2) // day collected
                 .with("countryCode", "DK")
-                .with("recordedBy", "Donald Hobern")
+                .with("recordedBy", Lists.newArrayList("Donald Hobern"))
                 .buildWithSchema());
 
     RelationshipAssertion<OccurrenceFeatures> assertion = OccurrenceRelationships.generate(o1, o2);
@@ -234,7 +238,7 @@ public class OccurrenceRelationshipsSparkTest extends BaseSparkTest {
                 .with("year", 2007)
                 .with("month", 5)
                 .with("day", 26)
-                .with("recordedBy", "D. S. Seigler & J. T. Miller")
+                .with("recordedBy", Lists.newArrayList("D. S. Seigler", "J. T. Miller"))
                 .buildWithSchema());
 
     OccurrenceFeatures o2 =
@@ -248,19 +252,19 @@ public class OccurrenceRelationshipsSparkTest extends BaseSparkTest {
                 .with("month", 5)
                 .with("day", 26)
                 .with(
-                    "recordedBy",
-                    "David S. Seigler|J.T. Miller") // we should at some point detect this match
+                    "recordedBy", Lists.newArrayList("Seigler", "J. T. Miller")) // Miller overlaps
                 .buildWithSchema());
 
     RelationshipAssertion<OccurrenceFeatures> assertion = OccurrenceRelationships.generate(o1, o2);
     assertNotNull(assertion);
-    assertTrue(assertion.justificationContainsAll(SAME_DATE, WITHIN_200m, SAME_ACCEPTED_SPECIES));
+    assertTrue(
+        assertion.justificationContainsAll(
+            SAME_DATE, WITHIN_200m, SAME_ACCEPTED_SPECIES, SAME_RECORDER_NAME));
   }
 
   @Test
   public void testNormaliseID() {
     assertEquals("ABC", OccurrenceRelationships.normalizeID(" A-/, B \\C"));
-    // These are examples of collectors we could be able to organize in the future
     assertEquals(
         "DAVIDSSEIGLERJTMILLER",
         OccurrenceRelationships.normalizeID("David S. Seigler|J.T. Miller"));

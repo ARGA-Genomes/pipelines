@@ -176,7 +176,7 @@ public class RowOccurrenceFeatures implements OccurrenceFeatures {
   }
 
   @Override
-  public String getTypeStatus() {
+  public List<String> getTypeStatus() {
     return get("typeStatus");
   }
 
@@ -186,7 +186,7 @@ public class RowOccurrenceFeatures implements OccurrenceFeatures {
   }
 
   @Override
-  public String getRecordedBy() {
+  public List<String> getRecordedBy() {
     return get("recordedBy");
   }
 
@@ -206,7 +206,7 @@ public class RowOccurrenceFeatures implements OccurrenceFeatures {
   }
 
   @Override
-  public String getOtherCatalogNumbers() {
+  public List<String> getOtherCatalogNumbers() {
     return get("otherCatalogNumbers");
   }
 

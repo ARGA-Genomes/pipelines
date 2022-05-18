@@ -221,17 +221,14 @@ public class ClusteringPipeline {
                     }
 
                     // 2. type status hashkeys
-                    if (Strings.isNotEmpty(taxonKey)
-                        && typeStatus != null) {
+                    if (Strings.isNotEmpty(taxonKey) && typeStatus != null) {
                       for (String t : typeStatus) {
                         out.output(builder.withHashKey(taxonKey + "|" + t).build());
                       }
                     }
 
                     // 3. taxonKey|year|recordedBy hashkeys
-                    if (Strings.isNotEmpty(taxonKey)
-                        && year != null
-                        && recordedBy != null) {
+                    if (Strings.isNotEmpty(taxonKey) && year != null && recordedBy != null) {
                       for (String r : recordedBy) {
                         out.output(builder.withHashKey(taxonKey + "|" + year + "|" + r).build());
                       }

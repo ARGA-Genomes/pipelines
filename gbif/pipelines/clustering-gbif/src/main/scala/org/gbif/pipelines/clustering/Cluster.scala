@@ -92,15 +92,19 @@ object Cluster {
         // specimens often link by record identifiers, while occurrence data skews here greatly for little benefit
         val bor = Option(r.getAs[String]("basisOfRecord"))
         if (specimenBORs.contains(bor.getOrElse("ignore"))) {
-          val idsUsed = Set[Option[String]](
+          var idsUsed = Set[Option[String]](
             Option(r.getAs[String]("occurrenceID")),
             Option(r.getAs[String]("fieldNumber")),
             Option(r.getAs[String]("recordNumber")),
             Option(r.getAs[String]("catalogNumber")),
-            Option(r.getAs[String]("otherCatalogNumbers")),
             triplify(r), // ic:cc:cn format
             scopeCatalogNumber(r) // ic:cn format like ENA uses
           )
+
+          val other = Option(r.getAs[Seq[String]]("otherCatalogNumbers"))
+          if (!other.isEmpty) {
+            idsUsed ++= other.get.map(x => Option(x))
+          }
 
           // clean IDs
           val filteredIds = idsUsed.filter(s => {

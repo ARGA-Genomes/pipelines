@@ -185,7 +185,7 @@ public class RowOccurrenceFeatures implements OccurrenceFeatures {
 
   @Override
   public List<String> getTypeStatus() {
-    return JavaConverters.seqAsJavaListConverter((Seq<String>) get("typeStatus")).asJava();
+    return listOrNull("typeStatus");
   }
 
   @Override
@@ -195,7 +195,7 @@ public class RowOccurrenceFeatures implements OccurrenceFeatures {
 
   @Override
   public List<String> getRecordedBy() {
-    return JavaConverters.seqAsJavaListConverter((Seq<String>) get("recordedBy")).asJava();
+    return listOrNull("recordedBy");
   }
 
   @Override
@@ -215,7 +215,7 @@ public class RowOccurrenceFeatures implements OccurrenceFeatures {
 
   @Override
   public List<String> getOtherCatalogNumbers() {
-    return JavaConverters.seqAsJavaListConverter((Seq<String>) get("otherCatalogNumbers")).asJava();
+    return listOrNull("otherCatalogNumbers");
   }
 
   @Override
@@ -226,5 +226,18 @@ public class RowOccurrenceFeatures implements OccurrenceFeatures {
   @Override
   public String getCollectionCode() {
     return get("collectionCode");
+  }
+
+  List<String> listOrNull(String field) {
+    Object o = get(field);
+    // what follows exists only to simply testing (List) and Spark using Hive (Seq) integrations
+    if (o == null) return null;
+    else if (o instanceof Seq) {
+      return JavaConverters.seqAsJavaListConverter((Seq<String>) o).asJava();
+    } else if (o instanceof List) {
+      return (List<String>) o;
+    } else {
+      throw new IllegalArgumentException("Expected a Seq or List for " + field);
+    }
   }
 }

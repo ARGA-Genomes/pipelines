@@ -71,7 +71,7 @@ object Cluster {
 
     spark.sql("use " + hiveDatabase)
 
-    val runAll = true; // developers: set to false to short circuit to the blocking stage
+    val runAll = true; // developers: set to false to short circuit to the clustering stage
 
     if (runAll) {
       val occurrences = sql(SQL_OCCURRENCE)

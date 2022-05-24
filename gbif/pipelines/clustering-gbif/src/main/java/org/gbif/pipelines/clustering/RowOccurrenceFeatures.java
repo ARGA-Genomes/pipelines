@@ -4,10 +4,18 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.module.scala.DefaultScalaModule;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.spark.sql.Row;
 import org.gbif.pipelines.core.parsers.clustering.OccurrenceFeatures;
+import scala.collection.JavaConverters;
+import scala.collection.Seq;
 
 /**
  * A wrapper around a Spark row giving exposing the terms necessary for clustering. This allows
@@ -177,7 +185,7 @@ public class RowOccurrenceFeatures implements OccurrenceFeatures {
 
   @Override
   public List<String> getTypeStatus() {
-    return get("typeStatus");
+    return JavaConverters.seqAsJavaListConverter((Seq<String>) get("typeStatus")).asJava();
   }
 
   @Override
@@ -187,7 +195,7 @@ public class RowOccurrenceFeatures implements OccurrenceFeatures {
 
   @Override
   public List<String> getRecordedBy() {
-    return get("recordedBy");
+    return JavaConverters.seqAsJavaListConverter((Seq<String>) get("recordedBy")).asJava();
   }
 
   @Override
@@ -207,7 +215,7 @@ public class RowOccurrenceFeatures implements OccurrenceFeatures {
 
   @Override
   public List<String> getOtherCatalogNumbers() {
-    return get("otherCatalogNumbers");
+    return JavaConverters.seqAsJavaListConverter((Seq<String>) get("otherCatalogNumbers")).asJava();
   }
 
   @Override

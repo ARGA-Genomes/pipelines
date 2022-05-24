@@ -1,7 +1,15 @@
 package org.gbif.pipelines.clustering;
 
-import static org.gbif.pipelines.core.parsers.clustering.RelationshipAssertion.FeatureAssertion.*;
-import static org.junit.Assert.*;
+import static org.gbif.pipelines.core.parsers.clustering.RelationshipAssertion.FeatureAssertion.APPROXIMATE_DATE;
+import static org.gbif.pipelines.core.parsers.clustering.RelationshipAssertion.FeatureAssertion.SAME_ACCEPTED_SPECIES;
+import static org.gbif.pipelines.core.parsers.clustering.RelationshipAssertion.FeatureAssertion.SAME_COUNTRY;
+import static org.gbif.pipelines.core.parsers.clustering.RelationshipAssertion.FeatureAssertion.SAME_DATE;
+import static org.gbif.pipelines.core.parsers.clustering.RelationshipAssertion.FeatureAssertion.SAME_RECORDER_NAME;
+import static org.gbif.pipelines.core.parsers.clustering.RelationshipAssertion.FeatureAssertion.SAME_SPECIMEN;
+import static org.gbif.pipelines.core.parsers.clustering.RelationshipAssertion.FeatureAssertion.WITHIN_200m;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import com.google.common.collect.Lists;
 import java.util.Arrays;

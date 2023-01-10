@@ -45,6 +45,12 @@ public class CompleteEventPipelineTestIT {
     long occurrencesCount = ElasticUtils.getRecordCount(INDEX_NAME, "type", "occurrence");
     assertEquals(2, occurrencesCount);
 
+    // check inheritance of locationID for events and occurrences
+    long eventLocationCount = ElasticUtils.getRecordCount(INDEX_NAME, "event.locationID", "BMP7");
+    assertEquals(4, eventLocationCount);
+    long occLocationCount = ElasticUtils.getRecordCount(INDEX_NAME, "occurrence.locationID", "BMP7");
+    assertEquals(2, occLocationCount);
+
     long allCount = ElasticUtils.getRecordCount(INDEX_NAME);
     assertEquals(7, allCount);
   }

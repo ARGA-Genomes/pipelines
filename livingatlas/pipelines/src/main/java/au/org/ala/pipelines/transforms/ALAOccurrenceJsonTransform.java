@@ -17,9 +17,6 @@ import org.apache.beam.sdk.values.KV;
 import org.apache.beam.sdk.values.PCollectionView;
 import org.apache.beam.sdk.values.TupleTag;
 import org.gbif.pipelines.io.avro.*;
-import org.gbif.pipelines.io.avro.json.EventInheritedRecord;
-import org.gbif.pipelines.io.avro.json.LocationInheritedRecord;
-import org.gbif.pipelines.io.avro.json.TemporalInheritedRecord;
 
 /**
  * Beam level transformation for the ES output json. The transformation consumes objects, which
@@ -80,11 +77,9 @@ public class ALAOccurrenceJsonTransform implements Serializable {
 
   private static final long serialVersionUID = 1279313931024806171L;
 
-  public static final TupleTag<LocationRecord> LIR_TAG =
-          new TupleTag<LocationRecord>() {};
+  public static final TupleTag<LocationRecord> LIR_TAG = new TupleTag<LocationRecord>() {};
 
-  public static final TupleTag<TemporalRecord> TIR_TAG =
-          new TupleTag<TemporalRecord>() {};
+  public static final TupleTag<TemporalRecord> TIR_TAG = new TupleTag<TemporalRecord>() {};
 
   // Core
   @NonNull private final TupleTag<ALAUUIDRecord> uuidRecordTag;
@@ -141,13 +136,9 @@ public class ALAOccurrenceJsonTransform implements Serializable {
             EventCoreRecord ecr =
                 v.getOnly(eventCoreRecordTag, EventCoreRecord.newBuilder().setId(k).build());
             LocationRecord lir =
-                v.getOnly(
-                    locationInheritedRecordTag,
-                    LocationRecord.newBuilder().setId(k).build());
+                v.getOnly(locationInheritedRecordTag, LocationRecord.newBuilder().setId(k).build());
             TemporalRecord tir =
-                v.getOnly(
-                    temporalInheritedRecordTag,
-                    TemporalRecord.newBuilder().setId(k).build());
+                v.getOnly(temporalInheritedRecordTag, TemporalRecord.newBuilder().setId(k).build());
 
             ALASensitivityRecord sr =
                 v.getOnly(sensitivityRecordTag, ALASensitivityRecord.newBuilder().setId(k).build());
@@ -183,8 +174,8 @@ public class ALAOccurrenceJsonTransform implements Serializable {
                         .temporal(tr)
                         .location(lr)
                         .verbatim(er)
-//                        .locationInheritedRecord(lir)
-//                        .temporalInheritedRecord(tir)
+                        //                        .locationInheritedRecord(lir)
+                        //                        .temporalInheritedRecord(tir)
                         .build()
                         .toJson();
               } else {

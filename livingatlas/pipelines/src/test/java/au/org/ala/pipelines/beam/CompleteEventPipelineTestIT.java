@@ -48,13 +48,15 @@ public class CompleteEventPipelineTestIT {
     // check inheritance of locationID for events and occurrences
     long eventLocationCount = ElasticUtils.getRecordCount(INDEX_NAME, "event.locationID", "BMP7");
     assertEquals(4, eventLocationCount);
-    long occLocationCount = ElasticUtils.getRecordCount(INDEX_NAME, "occurrence.locationID", "BMP7");
+    long occLocationCount =
+        ElasticUtils.getRecordCount(INDEX_NAME, "occurrence.locationID", "BMP7");
     assertEquals(2, occLocationCount);
 
     // check decimalLatitude inheritance
     long eventLatCount = ElasticUtils.getRecordCount(INDEX_NAME, "event.decimalLatitude", "-36.1");
     assertEquals(4, eventLatCount);
-    long occLatCount = ElasticUtils.getRecordCount(INDEX_NAME, "occurrence.decimalLatitude", "-36.1");
+    long occLatCount =
+        ElasticUtils.getRecordCount(INDEX_NAME, "occurrence.decimalLatitude", "-36.1");
     assertEquals(2, occLatCount);
 
     // check temporal inheritance
@@ -70,15 +72,19 @@ public class CompleteEventPipelineTestIT {
     assertEquals(2, occStateCount);
 
     // check eventTypeHierarchy inheritance
-    long eventSurveyCount = ElasticUtils.getRecordCount(INDEX_NAME, "event.eventTypeHierarchy", "Survey");
+    long eventSurveyCount =
+        ElasticUtils.getRecordCount(INDEX_NAME, "event.eventTypeHierarchy", "Survey");
     assertEquals(5, eventSurveyCount);
-    long occSurveyCount = ElasticUtils.getRecordCount(INDEX_NAME, "occurrence.eventTypeHierarchy", "Survey");
+    long occSurveyCount =
+        ElasticUtils.getRecordCount(INDEX_NAME, "occurrence.eventTypeHierarchy", "Survey");
     assertEquals(2, occSurveyCount);
 
     // check eventHierarchy inheritance
-    long eventSurveyIDCount = ElasticUtils.getRecordCount(INDEX_NAME, "event.eventHierarchy", "event1");
+    long eventSurveyIDCount =
+        ElasticUtils.getRecordCount(INDEX_NAME, "event.eventHierarchy", "event1");
     assertEquals(5, eventSurveyIDCount);
-    long occSurveyIDCount = ElasticUtils.getRecordCount(INDEX_NAME, "occurrence.eventHierarchy", "event1");
+    long occSurveyIDCount =
+        ElasticUtils.getRecordCount(INDEX_NAME, "occurrence.eventHierarchy", "event1");
     assertEquals(2, occSurveyIDCount);
 
     // check total documents indexed

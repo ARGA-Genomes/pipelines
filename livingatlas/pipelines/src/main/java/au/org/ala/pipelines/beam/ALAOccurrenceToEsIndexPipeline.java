@@ -39,9 +39,6 @@ import org.gbif.pipelines.core.pojo.HdfsConfigs;
 import org.gbif.pipelines.core.utils.FsUtils;
 import org.gbif.pipelines.io.avro.*;
 import org.gbif.pipelines.io.avro.grscicoll.GrscicollRecord;
-import org.gbif.pipelines.io.avro.json.EventInheritedRecord;
-import org.gbif.pipelines.io.avro.json.LocationInheritedRecord;
-import org.gbif.pipelines.io.avro.json.TemporalInheritedRecord;
 import org.gbif.pipelines.transforms.core.*;
 import org.gbif.pipelines.transforms.extension.MeasurementOrFactTransform;
 import org.gbif.pipelines.transforms.extension.MultimediaTransform;
@@ -329,10 +326,10 @@ public class ALAOccurrenceToEsIndexPipeline {
           Join.innerJoin(occMapping, eventCoreCollection).apply(Values.create());
 
       PCollection<KV<String, LocationRecord>> locationInheritedRecords =
-              Join.innerJoin(occMapping, eventLocationCollection).apply(Values.create());
+          Join.innerJoin(occMapping, eventLocationCollection).apply(Values.create());
 
       PCollection<KV<String, TemporalRecord>> temporalInheritedRecords =
-              Join.innerJoin(occMapping, eventTemporalCollection).apply(Values.create());
+          Join.innerJoin(occMapping, eventTemporalCollection).apply(Values.create());
 
       return KeyedPCollectionTuple
           // Core

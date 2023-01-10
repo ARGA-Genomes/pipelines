@@ -124,7 +124,7 @@ public class ALAOccurrenceJsonConverter {
                   locationInheritedRecord.getDecimalLatitude()));
     }
 
-    if (!hasLocationID && eventCore !=null && eventCore.getLocationID() != null) {
+    if (!hasLocationID && eventCore != null && eventCore.getLocationID() != null) {
       builder.setLocationID(eventCore.getLocationID());
     }
 

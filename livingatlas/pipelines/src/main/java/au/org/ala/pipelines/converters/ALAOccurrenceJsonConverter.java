@@ -31,8 +31,8 @@ public class ALAOccurrenceJsonConverter {
   private final EventCoreRecord eventCore;
 
   private final EventInheritedRecord eventInheritedRecord;
-  private final LocationInheritedRecord locationInheritedRecord;
-  private final TemporalInheritedRecord temporalInheritedRecord;
+  private final LocationRecord locationInheritedRecord;
+  private final TemporalRecord temporalInheritedRecord;
 
   private final MeasurementOrFactRecord measurementOrFact;
 

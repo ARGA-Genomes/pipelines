@@ -80,6 +80,12 @@ public class ALAOccurrenceJsonTransform implements Serializable {
 
   private static final long serialVersionUID = 1279313931024806171L;
 
+  public static final TupleTag<LocationRecord> LIR_TAG =
+          new TupleTag<LocationRecord>() {};
+
+  public static final TupleTag<TemporalRecord> TIR_TAG =
+          new TupleTag<TemporalRecord>() {};
+
   // Core
   @NonNull private final TupleTag<ALAUUIDRecord> uuidRecordTag;
   @NonNull private final TupleTag<ExtendedRecord> extendedRecordTag;
@@ -92,9 +98,8 @@ public class ALAOccurrenceJsonTransform implements Serializable {
   @NonNull private final PCollectionView<ALAMetadataRecord> metadataView;
   @NonNull private final TupleTag<MeasurementOrFactRecord> measurementOrFactRecordTupleTag;
 
-  @NonNull private final TupleTag<LocationInheritedRecord> locationInheritedRecordTag;
-  @NonNull private final TupleTag<TemporalInheritedRecord> temporalInheritedRecordTag;
-  @NonNull private final TupleTag<EventInheritedRecord> eventInheritedRecordTag;
+  @NonNull private final TupleTag<LocationRecord> locationInheritedRecordTag;
+  @NonNull private final TupleTag<TemporalRecord> temporalInheritedRecordTag;
   @NonNull private final TupleTag<ALASensitivityRecord> sensitivityRecordTag;
 
   // Determines if the output record is a parent-child record
@@ -131,21 +136,18 @@ public class ALAOccurrenceJsonTransform implements Serializable {
                 v.getOnly(
                     measurementOrFactRecordTupleTag,
                     MeasurementOrFactRecord.newBuilder().setId(k).build());
-            EventCoreRecord ecr =
-                v.getOnly(eventCoreRecordTag, EventCoreRecord.newBuilder().setId(k).build());
 
             // Inherited
-            EventInheritedRecord eir =
-                v.getOnly(
-                    eventInheritedRecordTag, EventInheritedRecord.newBuilder().setId(k).build());
-            LocationInheritedRecord lir =
+            EventCoreRecord ecr =
+                v.getOnly(eventCoreRecordTag, EventCoreRecord.newBuilder().setId(k).build());
+            LocationRecord lir =
                 v.getOnly(
                     locationInheritedRecordTag,
-                    LocationInheritedRecord.newBuilder().setId(k).build());
-            TemporalInheritedRecord tir =
+                    LocationRecord.newBuilder().setId(k).build());
+            TemporalRecord tir =
                 v.getOnly(
                     temporalInheritedRecordTag,
-                    TemporalInheritedRecord.newBuilder().setId(k).build());
+                    TemporalRecord.newBuilder().setId(k).build());
 
             ALASensitivityRecord sr =
                 v.getOnly(sensitivityRecordTag, ALASensitivityRecord.newBuilder().setId(k).build());
@@ -167,7 +169,6 @@ public class ALAOccurrenceJsonTransform implements Serializable {
                       .verbatim(er)
                       .measurementOrFact(mfr)
                       .eventCore(ecr)
-                      .eventInheritedRecord(eir)
                       .locationInheritedRecord(lir)
                       .temporalInheritedRecord(tir)
                       .sensitivityRecord(sr)
@@ -182,9 +183,8 @@ public class ALAOccurrenceJsonTransform implements Serializable {
                         .temporal(tr)
                         .location(lr)
                         .verbatim(er)
-                        .eventInheritedRecord(eir)
-                        .locationInheritedRecord(lir)
-                        .temporalInheritedRecord(tir)
+//                        .locationInheritedRecord(lir)
+//                        .temporalInheritedRecord(tir)
                         .build()
                         .toJson();
               } else {

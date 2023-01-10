@@ -315,9 +315,9 @@ public class ALAOccurrenceToEsIndexPipeline {
               .taxonRecordTag(taxonomyTransform.getTag())
               .multimediaRecordTag(multimediaTransform.getTag())
               .measurementOrFactRecordTupleTag(measurementOrFactTransform.getTag())
-              .locationInheritedRecordTag(InheritedFieldsTransform.LIR_TAG)
-              .temporalInheritedRecordTag(InheritedFieldsTransform.TIR_TAG)
-              .eventInheritedRecordTag(InheritedFieldsTransform.EIR_TAG)
+              // inherited
+              .locationInheritedRecordTag(ALAOccurrenceJsonTransform.LIR_TAG)
+              .temporalInheritedRecordTag(ALAOccurrenceJsonTransform.TIR_TAG)
               .eventCoreRecordTag(eventCoreTransform.getTag())
               .sensitivityRecordTag(sensitiveDataRecordTransform.getTag())
               .metadataView(metadataView)
@@ -328,16 +328,11 @@ public class ALAOccurrenceToEsIndexPipeline {
       PCollection<KV<String, EventCoreRecord>> eventCoreRecords =
           Join.innerJoin(occMapping, eventCoreCollection).apply(Values.create());
 
-      PCollection<KV<String, LocationInheritedRecord>> locationInheritedRecords =
-          Join.innerJoin(occMapping, inheritedFields.inheritLocationFields())
-              .apply(Values.create());
+      PCollection<KV<String, LocationRecord>> locationInheritedRecords =
+              Join.innerJoin(occMapping, eventLocationCollection).apply(Values.create());
 
-      PCollection<KV<String, TemporalInheritedRecord>> temporalInheritedRecords =
-          Join.innerJoin(occMapping, inheritedFields.inheritTemporalFields())
-              .apply(Values.create());
-
-      PCollection<KV<String, EventInheritedRecord>> eventInheritedRecords =
-          Join.innerJoin(occMapping, inheritedFields.inheritEventFields()).apply(Values.create());
+      PCollection<KV<String, TemporalRecord>> temporalInheritedRecords =
+              Join.innerJoin(occMapping, eventTemporalCollection).apply(Values.create());
 
       return KeyedPCollectionTuple
           // Core
@@ -354,9 +349,8 @@ public class ALAOccurrenceToEsIndexPipeline {
           .and(eventCoreTransform.getTag(), eventCoreRecords)
           .and(sensitiveDataRecordTransform.getTag(), alaSensitiveDataCollection)
           // Inherited
-          .and(InheritedFieldsTransform.LIR_TAG, locationInheritedRecords)
-          .and(InheritedFieldsTransform.TIR_TAG, temporalInheritedRecords)
-          .and(InheritedFieldsTransform.EIR_TAG, eventInheritedRecords)
+          .and(ALAOccurrenceJsonTransform.LIR_TAG, locationInheritedRecords)
+          .and(ALAOccurrenceJsonTransform.TIR_TAG, temporalInheritedRecords)
           // Apply
           .apply("Grouping occurrence objects", CoGroupByKey.create())
           .apply("Merging to occurrence json", occurrenceJsonDoFn);

@@ -190,6 +190,32 @@ public class SpeciesListDownloader {
         }
       }
     }
+
+    // ARGA-specific code to generate a distinct list of taxa from ALA biocache for `country:Australia` including record counts.
+    // This data will be added to the specieslist AVRO file via the taxonID as if it were a specieslist (it would be too big).
+    // If successful and more functionality is needed, it can be pulled out into its own pipeline. This is POC/
+    if (options.includeArgaBiocacheCounts()) {
+      // Load species list service
+      SpeciesListService service =
+              WsUtils.createClient(config.getSpeciesListService(), SpeciesListService.class);
+
+      // get authoritative list of lists
+//      Call<ResponseBody> countsCall = service.downloadCounts();
+//      ListSearchResponse listsResponse = SyncCall.syncCall(countsCall);
+
+      ResponseBody responseBody =
+              SyncCall.syncCall(service.downloadCounts());
+      // File source, String encoding, String delimiter, Character quotes, Integer headerRows
+      try (CSVReader csvReader =
+                   new CSVReader(new InputStreamReader(responseBody.byteStream(), "UTF-8"), ',', '"', 0)) {
+
+        List<String> columnHeaders = Arrays.asList(csvReader.readNext());
+        int guidIdx = columnHeaders.indexOf("taxonConceptID");
+        int countIdx = columnHeaders.indexOf("count");
+
+
+      }
+
     log.info("Finished. Output written to {}", outputPath);
   }
 }

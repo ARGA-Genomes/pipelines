@@ -12,4 +12,7 @@ public interface SpeciesListService {
 
   @GET("/speciesListItem/downloadList/{dataResourceUid}?fetch=%7BkvpValues%3Dselect%7")
   Call<ResponseBody> downloadList(@Path("dataResourceUid") String dataResourceUid);
+
+  @GET("/ws/occurrences/facets/download?q=country:Australia&qualityProfile=AVH&facets=taxon_name,taxonConceptID&count=true&file=AU_all_taxa_tn_counts.csv")
+  Call<ResponseBody> downloadCounts();
 }

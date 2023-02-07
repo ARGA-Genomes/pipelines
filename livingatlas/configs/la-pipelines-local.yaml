@@ -1,1 +1,41 @@
 # which filesystem to use: local or hdfs
+index:
+  includeSensitiveData: false
+  includeImages: false
+collectory:
+  httpHeaders:
+    Authorization: b86808d3-651d-4e79-b337-0bde2ff49444
+alaNameMatch:
+  wsUrl: https://namematching-ws.ala.org.au
+  timeoutSec: 100
+  retryConfig:
+    maxAttempts: 5
+    initialIntervalMillis: 5000
+speciesListService:
+  wsUrl: https://lists-test.ala.org.au
+  timeoutSec: 70
+alaBioacheService:
+  wsUrl: https://biocache-ws.ala.org.au
+  timeoutSec: 70
+speciesLists:
+#  runner: SparkRunner
+#  inputPath: '{fsPath}/pipelines-data'
+#  targetPath: '{fsPath}/pipelines-data'
+#  speciesAggregatesPath: '{fsPath}/pipelines-species'
+#  tempLocation: /tmp
+  maxDownloadAgeInMinutes: 10080
+  includeConservationStatus: true
+  includeInvasiveStatus: true
+  includeArgaBiocacheCounts: true
+elastic:
+  appName: Elastic indexing for {datasetId}
+  inputPath: "{fsPath}/pipelines-data"
+  targetPath: "{fsPath}/pipelines-data"
+  runner: SparkRunner
+  esHosts: http://localhost:9200
+  esSchemaPath: /tmp/es-occurrence-schema.json
+  esAlias: record
+  esIndexName: "record_{datasetId}"
+  indexNumberShards: 1
+  indexNumberReplicas: 0
+  esDocumentId: internalId

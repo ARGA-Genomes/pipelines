@@ -82,6 +82,7 @@ public class ALAOccurrenceJsonTransform implements Serializable {
   public static final TupleTag<TemporalRecord> TIR_TAG = new TupleTag<TemporalRecord>() {};
 
   // Core
+  @NonNull private final TupleTag<ALAAttributionRecord> alaAttributionRecordTupleTag;
   @NonNull private final TupleTag<ALAUUIDRecord> uuidRecordTag;
   @NonNull private final TupleTag<ExtendedRecord> extendedRecordTag;
   @NonNull private final TupleTag<BasicRecord> basicRecordTag;
@@ -113,8 +114,12 @@ public class ALAOccurrenceJsonTransform implements Serializable {
             CoGbkResult v = c.element().getValue();
             String k = c.element().getKey();
 
-            // Core
             ALAMetadataRecord mdr = c.sideInput(metadataView);
+            // Core
+            ALAAttributionRecord aar =
+                v.getOnly(
+                    alaAttributionRecordTupleTag,
+                    ALAAttributionRecord.newBuilder().setId(k).build());
             ALAUUIDRecord uuidr =
                 v.getOnly(uuidRecordTag, ALAUUIDRecord.newBuilder().setId(k).build());
 
@@ -174,8 +179,6 @@ public class ALAOccurrenceJsonTransform implements Serializable {
                         .temporal(tr)
                         .location(lr)
                         .verbatim(er)
-                        //                        .locationInheritedRecord(lir)
-                        //                        .temporalInheritedRecord(tir)
                         .build()
                         .toJson();
               } else {

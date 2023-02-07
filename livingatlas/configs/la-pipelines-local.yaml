@@ -1,1 +1,3 @@
 # which filesystem to use: local or hdfs
+elastic:
+  esSchemaPath: /Users/mar759/dev/pipelines/livingatlas/pipelines/src/test/resources/complete-event-pipeline/es-event-core-schema.json

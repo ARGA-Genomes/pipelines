@@ -362,6 +362,10 @@ public class ALAParentJsonConverter {
                         .setMeasurementType(mor.getMeasurementType())
                         .setMeasurementValue(mor.getMeasurementValue())
                         .setMeasurementUnit(mor.getMeasurementUnit())
+                        .setMeasurementAccuracy(mor.getMeasurementAccuracy())
+                        .setMeasurementDeterminedBy(mor.getMeasurementDeterminedBy())
+                        .setMeasurementDeterminedDate(mor.getMeasurementDeterminedDate())
+                        .setMeasurementRemarks(mor.getMeasurementRemarks())
                         .build();
                   })
               .collect(Collectors.toList());

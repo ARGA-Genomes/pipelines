@@ -130,14 +130,6 @@ public class ALAVerbatimToEventPipeline {
     UnaryOperator<String> pathFn =
         t -> PathBuilder.buildPathInterpretUsingTargetPath(options, CORE_TERM, t, id);
 
-    UnaryOperator<String> occPathFn =
-        t -> PathBuilder.buildPathInterpretUsingTargetPath(options, DwcTerm.Occurrence, t, id);
-
-    UnaryOperator<String> occModifiedPathFn =
-        t ->
-            PathBuilder.buildPathInterpretUsingTargetPath(
-                options, DwcTerm.Occurrence, "event_" + t, id);
-
     log.info("Creating a pipeline from options");
     Pipeline p = pipelinesFn.apply(options);
 
@@ -178,17 +170,12 @@ public class ALAVerbatimToEventPipeline {
         MeasurementOrFactTransform.builder().create();
     log.info("Creating beam pipeline");
 
-    PCollectionView<ALAMetadataRecord> metadataView;
     if (useMetadataRecordWriteIO(types)) {
       PCollection<ALAMetadataRecord> metadataRecord =
           p.apply("Create metadata collection", Create.of(options.getDatasetId()))
               .apply("Interpret metadata", metadataTransform.interpret());
 
       metadataRecord.apply("Write metadata to avro", metadataTransform.write(pathFn));
-    } else {
-      PCollection<ALAMetadataRecord> metadataRecord =
-          p.apply("Read metadata record", metadataTransform.read(pathFn));
-      metadataView = metadataRecord.apply("Convert to event metadata view", View.asSingleton());
     }
 
     // Read raw records and filter duplicates

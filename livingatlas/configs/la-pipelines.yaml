@@ -255,6 +255,7 @@ elastic:
   esIndexName: 'event_{datasetId}'
   indexNumberShards: 1
   indexNumberReplicas: 0
+  metaFileName: elastic.yml
   esDocumentId: internalId
 
 export:

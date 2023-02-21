@@ -225,6 +225,7 @@ index:
   includeSpeciesLists: true
   # set this to false to avoid SDS requirement
   includeSensitiveDataChecks: true
+#  includeSensitiveData: true
   runner: SparkRunner
   allDatasetsInputPath: '{fsPath}/pipelines-all-datasets'
 

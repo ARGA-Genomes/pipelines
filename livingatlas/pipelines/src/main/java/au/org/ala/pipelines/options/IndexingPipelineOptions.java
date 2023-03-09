@@ -35,4 +35,10 @@ public interface IndexingPipelineOptions
   Boolean getIncludeSensitiveDataChecks();
 
   void setIncludeSensitiveDataChecks(Boolean includeSensitiveDataChecks);
+
+  @Description("Include sensitive data checks")
+  @Default.Integer(30000)
+  Integer getTimeBufferInMillis();
+
+  void setTimeBufferInMillis(Integer timeBufferInMillis);
 }

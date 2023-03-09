@@ -577,26 +577,6 @@ function elastic () {
     logStepEnd "Elastic" $dr $ltype $SECONDS
 }
 
-function elastic () {
-    local dr="$1" ltype="$2"
-
-    SECONDS=0
-    logStepStart "Elastic" $dr
-
-    SH_ARGS=elastic-sh-args.local
-    CLASS=au.org.ala.pipelines.beam.ElasticPipeline
-    java-pipeline $ltype $SH_ARGS $CLASS $dr
-
-    SH_ARGS=elastic-sh-args.spark-embedded
-    CLASS=au.org.ala.pipelines.beam.ElasticPipeline
-    spark-embed-pipeline $ltype $SH_ARGS $CLASS $dr
-
-    SH_ARGS=elastic-sh-args.spark-cluster
-    spark-cluster-pipeline $ltype $SH_ARGS $CLASS $dr "elastic $dr"
-
-    logStepEnd "Elastic" $dr $ltype $SECONDS
-}
-
 function validate () {
     local dr="$1" ltype="$2"
     CLASS=au.org.ala.pipelines.beam.ALAUUIDValidationPipeline
